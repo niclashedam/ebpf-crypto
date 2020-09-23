@@ -2,6 +2,8 @@ CC = g++
 CFLAGS = -O -Wall -I ./bcc/build/src/cc -I ./bcc/src/cc/api/ -I ./bcc/src/cc/
 LIBS = -lbcc -lbcc_bpf
 
+.PHONY: bcc
+
 all: enc
 
 bcc:
