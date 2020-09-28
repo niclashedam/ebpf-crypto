@@ -51,5 +51,9 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# Build files
-/build/*
+# Ubuntu src files
+/ubuntu-src
+/lib64
+
+# Executable
+/src/ebpf-crypto
