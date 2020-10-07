@@ -51,9 +51,10 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# Ubuntu src files
-/ubuntu-src
+# Kernel src files
+/kernel-src
 /lib64
+/include
 
 # Executable
 /src/ebpf-crypto

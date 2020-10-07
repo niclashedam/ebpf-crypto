@@ -3,15 +3,15 @@ CLANG = clang
 EXECABLE = src/ebpf-crypto
 BPFCODE = src/bpf_program
 
-BPFTOOLS = ubuntu-src/samples/bpf
+BPFTOOLS = kernel-src/samples/bpf
 BPFLOADER = $(BPFTOOLS)/bpf_load.c
 
-CCINCLUDE += -I/kernel-src/tools/testing/selftests/bpf
+CCINCLUDE += -Ikernel-src/tools/testing/selftests/bpf
 
-LOADINCLUDE += -Iubuntu-src/samples/bpf
-LOADINCLUDE += -Iubuntu-src/tools/lib
-LOADINCLUDE += -Iubuntu-src/tools/perf
-LOADINCLUDE += -Iubuntu-src/tools/include
+LOADINCLUDE += -Ikernel-src/samples/bpf
+LOADINCLUDE += -Ikernel-src/tools/lib
+LOADINCLUDE += -Ikernel-src/tools/perf
+LOADINCLUDE += -Ikernel-src/tools/include
 LIBRARY_PATH = -Llib64
 BPFSO = -lbpf
 
@@ -20,18 +20,20 @@ BPFSO = -lbpf
 deps:
 	sudo apt update
 	sudo apt install -y build-essential git make libelf-dev clang strace tar bpfcc-tools linux-headers-$(uname -r) gcc-multilib
-	test -e ubuntu-src || git clone --depth 1 git://kernel.ubuntu.com/ubuntu/ubuntu-focal.git ubuntu-src
-	cd ubuntu-src/tools/lib/bpf && make && make install prefix=../../../../
+
+kernel-src:
+	test -e kernel-src || git clone https://github.com/torvalds/linux.git kernel-src
+	cd kernel-src/tools/lib/bpf && git fetch && git checkout v5.8 && make && make install prefix=../../../../
 
 clean:
 	rm -f src/*.o src/*.so $(EXECABLE)
 
-build: ${BPFCODE.c} ${BPFLOADER}
+build: kernel-src ${BPFCODE.c} ${BPFLOADER}
 	$(CLANG) -O2 -target bpf -c $(BPFCODE:=.c) $(CCINCLUDE) -o ${BPFCODE:=.o}
 
 bpfload: build
-	clang -o $(EXECABLE) -lelf $(LOADINCLUDE) $(LIBRARY_PATH) $(BPFSO) \
-        $(BPFLOADER) -DHAVE_ATTR_TEST=0 src/loader.c
+	$(CLANG) -o $(EXECABLE) -lelf $(LOADINCLUDE) $(LIBRARY_PATH) $(BPFSO) \
+        $(BPFLOADER) -DHAVE_ATTR_TEST=0 src/trace_helpers.c src/loader.c
 
 $(EXECABLE): bpfload
 

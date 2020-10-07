@@ -1,4 +1,5 @@
 #include "bpf_load.h"
+#include "trace_helpers.h"
 #include <stdio.h>
 
 int main(int argc, char **argv) {
