@@ -11,13 +11,19 @@ To install ebpf-crypto, first clone this repository.
 git clone https://github.com/niclashedam/ebpf-crypto
 ```
 
-Download and install needed dependencies.
+Install dependencies needed to compile *ebpf-crypto*.
 
 ```
 make deps
 ```
 
-Compile ebpf-crypto.
+Download the newest instance of the kernel and compile necessary modules. This will take 5-10 minutes depending on your connection.
+
+```
+make kernel-src
+```
+
+Compile *ebpf-crypto*.
 
 ```
 make
