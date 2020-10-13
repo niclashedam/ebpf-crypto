@@ -34,7 +34,7 @@ make
 To start ebpf-crypto, go to the root of the repository and run.
 
 ```
-sudo LD_LIBRARY_PATH=lib64/:$LD_LIBRARY_PATH ./src/ebpf-crypt
+sudo LD_LIBRARY_PATH=lib64/:$LD_LIBRARY_PATH ./src/ebpf-crypto
 ```
 
 ## Contributing
