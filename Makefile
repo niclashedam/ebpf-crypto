@@ -7,6 +7,7 @@ BPFTOOLS = kernel-src/samples/bpf
 BPFLOADER = $(BPFTOOLS)/bpf_load.c
 
 CCINCLUDE += -Ikernel-src/tools/testing/selftests/bpf
+CCINCLUDE += -Ikernel-src/tools/lib/bpf
 
 LOADINCLUDE += -Ikernel-src/samples/bpf
 LOADINCLUDE += -Ikernel-src/tools/lib
@@ -24,12 +25,13 @@ deps:
 kernel-src:
 	test -e kernel-src || git clone https://github.com/torvalds/linux.git kernel-src
 	cd kernel-src/tools/lib/bpf && git fetch && git checkout v5.8 && make && make install prefix=../../../../
+	cp -R kernel-src/include/asm-generic kernel-src/include/asm
 
 clean:
 	rm -f src/*.o src/*.so $(EXECABLE)
 
 build: kernel-src ${BPFCODE.c} ${BPFLOADER}
-	$(CLANG) -O2 -target bpf -c $(BPFCODE:=.c) $(CCINCLUDE) -o ${BPFCODE:=.o}
+        $(CLANG) -O2 -target bpf -c $(BPFCODE:=.c) $(CCINCLUDE) -o ${BPFCODE:=.o}
 
 bpfload: build
 	$(CLANG) -o $(EXECABLE) -lelf $(LOADINCLUDE) $(LIBRARY_PATH) $(BPFSO) \
