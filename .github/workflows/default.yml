@@ -25,5 +25,8 @@ jobs:
       - name: Install dependencies
         run: make deps
 
+      - name: Compile kernel
+        run: make kernel-src
+
       - name: Compile ebpf-crypto
         run: make
