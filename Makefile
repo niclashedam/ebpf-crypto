@@ -1,5 +1,7 @@
 CLANG = clang
 
+LINUX_VERSION = v5.8
+
 EXECABLE = src/ebpf-crypto
 BPFCODE = src/bpf_program
 
@@ -23,8 +25,8 @@ deps:
 	sudo apt install -y build-essential git make libelf-dev clang strace tar bpfcc-tools linux-headers-$(uname -r) gcc-multilib
 
 kernel-src:
-	test -e kernel-src || git clone https://github.com/torvalds/linux.git kernel-src
-	cd kernel-src/tools/lib/bpf && git fetch && git checkout v5.8 && make && make install prefix=../../../../
+	git clone --depth 1 --single-branch --branch ${LINUX_VERSION}  https://github.com/torvalds/linux.git kernel-src
+	cd kernel-src/tools/lib/bpf && make && make install prefix=../../../../
 	cp -R kernel-src/include/asm-generic kernel-src/include/asm
 
 clean:
