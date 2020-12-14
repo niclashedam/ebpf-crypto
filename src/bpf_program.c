@@ -1,25 +1,7 @@
 #include <asm/ptrace.h>
 #include <linux/bpf.h>
+#include <linux/bio.h>
 
-#define SEC(NAME) __attribute__((section(NAME), used))
-
-static int (*bpf_trace_printk)(const char *fmt, int fmt_size,
-                               ...) = (void *)BPF_FUNC_trace_printk;
-
-struct blk_mq_queue_data {
-	struct request *rq;
-};
-
-struct bio {
-        unsigned short bi_vcnt;
-	struct bio *bi_next;
-	struct bio_vec *bi_io_vec;
-};
-
-struct request {
-	struct bio *bio;
-	struct bio *biotail;
-};
 
 SEC("kprobe/nvme_queue_rq")
 int bpf_prog(struct pt_regs *ctx) {
