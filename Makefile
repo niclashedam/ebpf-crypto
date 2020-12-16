@@ -10,7 +10,6 @@ BPFLOADER = $(BPFTOOLS)/bpf_load.c
 
 CCINCLUDE += -Ikernel-src/tools/testing/selftests/bpf
 CCINCLUDE += -Ikernel-src/tools/lib/bpf
-CCINCLUDE += -Ikernel-src/include
 
 LOADINCLUDE += -Ikernel-src/samples/bpf
 LOADINCLUDE += -Ikernel-src/tools/lib
